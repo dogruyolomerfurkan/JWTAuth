@@ -38,7 +38,7 @@ public class UserBusinessRules
 
     public async Task<User> UserPasswordMustMatchWhenLogin(string email, string password)
     {
-        var currentUser = await _readRepository.Get(p => p.Email == email, false, p => p.UserRoles).FirstOrDefaultAsync();
+        var currentUser = await _readRepository.Get(p => p.Email == email, false).Include(p => p.UserRoles).ThenInclude(p => p.Role).FirstOrDefaultAsync();
 
         if (currentUser is null) throw new BusinessException("User not exist");
 
